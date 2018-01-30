@@ -3,6 +3,9 @@ const {
     SassPlugin,
     CSSPlugin,
     WebIndexPlugin,
+    HTMLPlugin,
+    JSONPlugin,
+    RawPlugin,
     Sparky,
     UglifyJSPlugin,
     QuantumPlugin,
@@ -12,6 +15,7 @@ const {
 const express = require("express");
 const path = require("path");
 const {spawn} = require("child_process");
+const { Ng2TemplatePlugin } = require('ng2-fused');
 
 let producer;
 let production = false;
@@ -22,10 +26,14 @@ Sparky.task("build:renderer", () => {
         output: "dist/renderer/$name.js",
         hash: production,
         target: "electron",
+        warnings: false,
         experimentalFeatures: true,
         cache: !production,
         plugins: [
             EnvPlugin({ NODE_ENV: production ? "production" : "development" }),
+            Ng2TemplatePlugin(),
+            ['*.component.html', RawPlugin()],
+            ['*.component.scss', RawPlugin()],
             [SassPlugin(), CSSPlugin()],
             WebIndexPlugin({
                 title: "FuseBox electron demo",
@@ -54,14 +62,17 @@ Sparky.task("build:renderer", () => {
         })
     }
 
+    const vendor = fuse.bundle('vendor').instructions('~ main.ts');
+    if (!production) {
+      vendor.watch().hmr();
+    }
     const app = fuse.bundle("renderer")
-        .instructions('> [index.ts] + fuse-box-css')
 
     if (!production) {
-        app.hmr().watch()
+        app.sourceMaps().hmr().watch()
     }
-
-    return fuse.run()
+    app.instructions('>[main.ts]');
+    return fuse.run();
 });
 
 Sparky.task("build:main", () => {
@@ -91,15 +102,7 @@ Sparky.task("build:main", () => {
 
         return fuse.run().then(() => {
             // launch electron the app
-            const child = spawn('npm', [ 'run', 'start:electron:watch' ], { shell:true, stdio: 'inherit'});
-            child.stdout.on('data', function(data) {
-                console.log(data.toString());
-                //Here is where the output goes
-            });
-            child.stderr.on('data', function(data) {
-                console.error(data.toString());
-                //Here is where the error output goes
-            });
+            const child = spawn('npm', [ 'run', 'start:electron:watch' ], { shell:true, stdio: 'inherit', stderr: 'inherit'});
         });
     }
 

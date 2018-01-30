@@ -8,8 +8,11 @@ const electron = require('electron'); // Module to control application life.
 import * as logger from './logger';
 import * as windowBounds from './windowBounds';
 // const autoUpdater = require('./autoUpdater') // comming soon
+import './devExtensions';
+import { SEEDS } from './data';
 
 const app = electron.app; // Module to create native browser window.
+const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -26,7 +29,6 @@ function createWindow() {
     ...windowBounds.get(),
     icon: path.join(__dirname, 'resources', 'icon.png')
   });
-
   logger.init(mainWindow);
   windowBounds.init(mainWindow);
 
@@ -77,3 +79,6 @@ app.on('activate', function() {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+ipcMain.on('req:people', (event, arg: any) => {
+  event.sender.send('res:people', SEEDS );
+});

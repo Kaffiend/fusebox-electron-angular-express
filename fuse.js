@@ -24,6 +24,7 @@ Sparky.task("build:renderer", () => {
     const fuse = FuseBox.init({
         homeDir: "src/renderer",
         output: "dist/renderer/$name.js",
+        tsConfig: "src/renderer/tsconfig.renderer.json",
         hash: production,
         target: "electron",
         warnings: false,
@@ -113,6 +114,7 @@ Sparky.task("build:server", () => {
   const fuse = FuseBox.init({
       homeDir: "src/server",
       output: "dist/server/$name.js",
+      tsConfig: "src/server/tsconfig.server.json",
       target: "server",
       experimentalFeatures: true,
       cache: !production,
@@ -136,11 +138,13 @@ Sparky.task("build:server", () => {
 
       return fuse.run().then(() => {
           // launch express the app
-          const child = spawn('npm', [ 'run', 'start:server:watch' ], { shell:true, stdio: 'inherit', stderr: 'inherit'});
+          const child = spawn('npm', [ 'run', 'start:server:watch' ], { shell:true, stdio: 'inherit' });
       });
+    return fuse.dev();
+  } else {
+    return fuse.run();
   }
 
-  return fuse.run()
 });
 
 

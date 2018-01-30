@@ -38,6 +38,6 @@ app.use(function (err: Error, req: express.Request, res: express.Response, next:
 });
 
 app.listen(5001, function () {
-    console.info('API listening on port 5000-one!');
-    console.info('Sockets listening on port 5000-two');
+    console.info('API listening on port 5001');
+    console.info('Sockets listening on port 5002');
 });

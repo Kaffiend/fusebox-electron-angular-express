@@ -12,7 +12,7 @@ export class DistrictSocket implements RegisterableSocket {
 
     constructor(
         @inject(TYPES.DistrictService) districtService: DistrictService
-    ) { 
+    ) {
         this.districtService = districtService;
     }
 
@@ -25,7 +25,7 @@ export class DistrictSocket implements RegisterableSocket {
             this.socket.on('District:Create', (district) => this.createDistrict(district));
         });
     }
-    
+
     public async getDistricts(): Promise<void> {
         console.log('district read called');
         const dist = await this.districtService.findAll();
@@ -38,4 +38,3 @@ export class DistrictSocket implements RegisterableSocket {
     }
 
 }
-

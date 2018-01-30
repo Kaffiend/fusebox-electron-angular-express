@@ -8,34 +8,36 @@ export class DistrictSocketService {
   private socketUrl: string;
 
   constructor() {
-    this.socket = io('http://localhost:5002');
-    this.socket.on('connection', (socket) => {
+    this.socket = io('http://localhost:5001');
+    console.log('should be connecting');
+    this.socket.on('connection', socket => {
+      console.log('connected', socket);
     });
-   }
+  }
 
-   public DistrictRead() {
-     this.socket.emit('District:Read');
-   }
+  public DistrictRead() {
+    this.socket.emit('District:Read');
+  }
 
-   public DistrictCreate(district) {
-     this.socket.emit('District:Create', district);
-   }
+  public DistrictCreate(district) {
+    this.socket.emit('District:Create', district);
+  }
 
-   public DistrictCreateSuccess(): Observable<any> {
-     return new Observable(observer => {
-       this.socket.on('District:Create', (payload) => {
-         observer.next(payload);
-       });
-       return () => this.socket.disconnect();
-     });
-   }
+  public DistrictCreateSuccess(): Observable<any> {
+    return new Observable(observer => {
+      this.socket.on('District:Create', payload => {
+        observer.next(payload);
+      });
+      return () => this.socket.disconnect();
+    });
+  }
 
-   public DistrictReturn(): Observable<any> {
-     return new Observable(observer => {
-       this.socket.on('District:Return', (payload) => {
-         observer.next(payload);
-       });
-       return () => this.socket.disconnect();
-     });
-   }
+  public DistrictReturn(): Observable<any> {
+    return new Observable(observer => {
+      this.socket.on('District:Return', payload => {
+        observer.next(payload);
+      });
+      return () => this.socket.disconnect();
+    });
+  }
 }

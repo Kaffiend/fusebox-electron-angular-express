@@ -30,7 +30,7 @@ export class CountyConfigServiceImpl implements CountyConfigService {
             conf.configName,
             conf.countyName,
             conf.assessorName,
-           conf._id.toString()
+            conf._id
         );
     }
 }

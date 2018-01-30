@@ -13,7 +13,7 @@ import * as io from 'socket.io';
 // create express application
 const app: express.Application = express();
 const httpServer: Server = http.createServer(app);
-const socketServer: SocketIO.Server = io.listen(httpServer.listen(5002));
+const socketServer: SocketIO.Server = io(httpServer);
 // setup default cors response headers.
 app.use(cors());
 // let express support JSON bodies
@@ -38,6 +38,5 @@ app.use(function (err: Error, req: express.Request, res: express.Response, next:
 });
 
 app.listen(5001, function () {
-    console.info('API listening on port 5001');
-    console.info('Sockets listening on port 5002');
+    console.info('listening on port 5001');
 });

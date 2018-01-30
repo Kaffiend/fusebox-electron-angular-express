@@ -53,7 +53,7 @@ Sparky.task("build:renderer", () => {
 
     if (!production) {
         // Configure development server
-        fuse.dev({ root: false }, server => {
+        fuse.dev({ root: false,socketURI: 'ws://localhost:4444' }, server => {
             const dist = path.join(__dirname, "dist");
             const app = server.httpServer.app;
             app.use("/renderer/", express.static(path.join(dist, 'renderer')));
@@ -65,12 +65,12 @@ Sparky.task("build:renderer", () => {
 
     const vendor = fuse.bundle('vendor').instructions('~ main.ts');
     if (!production) {
-      vendor.watch().hmr();
+      vendor.watch();
     }
     const app = fuse.bundle("renderer")
 
     if (!production) {
-        app.sourceMaps().hmr().watch()
+        app.watch()
     }
     app.instructions('>[main.ts]');
     return fuse.run();
@@ -80,6 +80,7 @@ Sparky.task("build:main", () => {
     const fuse = FuseBox.init({
         homeDir: "src/main",
         output: "dist/main/$name.js",
+        tsConfig: "src/main/tsconfig.main.json",
         target: "server",
         experimentalFeatures: true,
         cache: !production,
@@ -103,7 +104,7 @@ Sparky.task("build:main", () => {
 
         return fuse.run().then(() => {
             // launch electron the app
-            const child = spawn('npm', [ 'run', 'start:electron:watch' ], { shell:true, stdio: 'inherit', stderr: 'inherit'});
+            const child = spawn('npm', [ 'run', 'start:electron:watch' ], { shell:true, stdio: 'inherit' });
         });
     }
 
@@ -140,8 +141,6 @@ Sparky.task("build:server", () => {
           // launch express the app
           const child = spawn('npm', [ 'run', 'start:server:watch' ], { shell:true, stdio: 'inherit' });
       });
-    return fuse.dev();
-  } else {
     return fuse.run();
   }
 

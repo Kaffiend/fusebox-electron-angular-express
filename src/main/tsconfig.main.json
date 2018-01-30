@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outFile": "dist/main/main.js",
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",

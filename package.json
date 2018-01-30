@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node fuse",
     "start:server": "node dist/server/server.js",
-    "start:server:watch": "nodemon --config 'nodemon-server.json' --exec npm run start:server",
+    "start:server:watch": "npm run start:server",
     "start:electron": "electron .",
     "start:electron:watch": "nodemon --watch '.dist/main/*.*' --exec npm run start:electron",
     "build": "npm run lint && cross-env NODE_ENV=production && node fuse dist",

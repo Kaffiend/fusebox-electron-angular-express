@@ -37,7 +37,6 @@ app.use(function (err: Error, req: express.Request, res: express.Response, next:
     res.status(500).send('Internal Server Error');
 });
 
-
 app.listen(5001, function () {
     console.info('API listening on port 5000-one!');
     console.info('Sockets listening on port 5000-two');

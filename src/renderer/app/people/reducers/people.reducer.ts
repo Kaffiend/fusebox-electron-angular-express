@@ -35,7 +35,6 @@ export const peopleAdapter: EntityAdapter<Person> = createEntityAdapter<Person>(
   sortComparer: sortByName
 });
 
-
 export const initialState: State = peopleAdapter.getInitialState({
   selectedPersonId: null
 });

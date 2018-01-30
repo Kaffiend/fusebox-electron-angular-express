@@ -1,5 +1,6 @@
 export interface District {
-  id?: string;
-  name: string;
-  code: string;
+  _id: string;
+  description: string;
+  districtNumber: string;
+  sortSequence: number;
 }

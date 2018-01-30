@@ -65,12 +65,12 @@ Sparky.task("build:renderer", () => {
 
     const vendor = fuse.bundle('vendor').instructions('~ main.ts');
     if (!production) {
-      vendor.watch();
+      vendor.watch().hmr();
     }
     const app = fuse.bundle("renderer")
 
     if (!production) {
-        app.watch()
+        app.watch().hmr();
     }
     app.instructions('>[main.ts]');
     return fuse.run();

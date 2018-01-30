@@ -27,8 +27,14 @@ export const getDistrictFormState = createSelector(
   getConfigurationState,
   state => state.districtForm
 );
+export const getDistrictState = createSelector(
+  getConfigurationState,
+  state => state.districts
+);
 
 export const getDistrictEntitiesState = createSelector(
   getConfigurationState,
   state => state.districts
 );
+
+export const selectAllDistricts = createSelector(getDistrictState, fromDistricts.selectAllDistricts);

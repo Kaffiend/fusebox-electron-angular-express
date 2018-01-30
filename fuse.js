@@ -109,9 +109,43 @@ Sparky.task("build:main", () => {
     return fuse.run()
 });
 
+Sparky.task("build:server", () => {
+  const fuse = FuseBox.init({
+      homeDir: "src/server",
+      output: "dist/server/$name.js",
+      target: "server",
+      experimentalFeatures: true,
+      cache: !production,
+      plugins: [
+          EnvPlugin({ NODE_ENV: production ? "production" : "development" }),
+          production && QuantumPlugin({
+              bakeApiIntoBundle : 'server',
+              target : 'server',
+              treeshake: true,
+              removeExportsInterop: false,
+              uglify: true
+          })
+      ]
+  });
+
+  const app = fuse.bundle("server")
+      .instructions('> [server.ts]')
+
+  if (!production) {
+      app.watch()
+
+      return fuse.run().then(() => {
+          // launch express the app
+          const child = spawn('npm', [ 'run', 'start:server:watch' ], { shell:true, stdio: 'inherit', stderr: 'inherit'});
+      });
+  }
+
+  return fuse.run()
+});
+
 
 // main task
-Sparky.task("default", ["clean:dist", "clean:cache", "build:renderer", "build:main"], () => {});
+Sparky.task("default", ["clean:dist", "clean:cache","build:server", "build:renderer", "build:main"], () => {});
 
 // wipe it all
 Sparky.task("clean:dist", () => Sparky.src("dist/*").clean("dist/"));

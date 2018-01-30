@@ -8,7 +8,7 @@ export class DistrictSocketService {
   private socketUrl: string;
 
   constructor() {
-    this.socket = io('http://localhost:5001');
+    this.socket = io('http://localhost:5002');
     console.log('should be connecting');
     this.socket.on('connection', socket => {
       console.log('connected', socket);

@@ -26,8 +26,8 @@ Sparky.task("build:renderer", () => {
         output: "dist/renderer/$name.js",
         tsConfig: "src/renderer/tsconfig.renderer.json",
         hash: production,
-        target: "electron",
-        warnings: false,
+        target: "browser",
+        warnings: true,
         experimentalFeatures: true,
         cache: !production,
         plugins: [
@@ -53,7 +53,7 @@ Sparky.task("build:renderer", () => {
 
     if (!production) {
         // Configure development server
-        fuse.dev({ root: false,socketURI: 'ws://localhost:4444' }, server => {
+        fuse.dev({ root: false }, server => {
             const dist = path.join(__dirname, "dist");
             const app = server.httpServer.app;
             app.use("/renderer/", express.static(path.join(dist, 'renderer')));
